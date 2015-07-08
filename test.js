@@ -206,7 +206,7 @@ describe('Utils', function() {
 			newFunction();
 			expect(count).to.equal(1);
 		});
-		
+
 	});
 
 	describe('#debounce()', function () {
@@ -220,6 +220,25 @@ describe('Utils', function() {
 			newFunction();
 			console.log(newFunction);
 			expect(text.toUpperCase()).to.equal('HELLO');
+		});
+
+		it('new debounced version of the passed function', function () {
+			var time = 1000;
+			var testText = 'doing something';
+
+			var date;
+			var currentDate;
+
+			var test = function () {
+				date = new Date();
+				utils.debounce(function () {
+					return testText.toUpperCase();
+				}, time);
+				currentDate = new Date();
+
+				return ((currentDate - date) <= time);
+			};
+			expect(test()).to.equal(true);
 		});
 	});
 
