@@ -7,6 +7,9 @@ module.exports = {
      */
 
     sort:function (list, comparator) {
+        if (list === null) {
+            return false;
+        }
         var count = list.length;
         for (var i = 0; i < count-1; i++)
         { for (var j = 0; j < count-1-i; j++)
@@ -27,6 +30,15 @@ module.exports = {
      */
 
     capitalize:function (string) {
+        if (typeof string === 'number') {
+            return false;
+        }
+        if (string === null) {
+            return false;
+        }
+        if(this.isObject(string)) {
+            return false;
+        }
         var lowerCase = string.toLowerCase();
         return lowerCase.charAt(0).toUpperCase() + lowerCase.slice(1);
     },
@@ -39,7 +51,12 @@ module.exports = {
 
     camelize:function (sequence) {
         var string = '';
-
+        if(typeof sequence === 'number') {
+            return false;
+        }
+        if(sequence === null) {
+            return false;
+        }
         if (this.isArray(sequence)) {
             for (var i = 0; i < sequence.length; i++) {
                 if ((typeof sequence[i]) === 'object') {
@@ -69,6 +86,9 @@ module.exports = {
      */
 
     trim:function (str) {
+        if(str === null) {
+            return false;
+        }
         return str.replace(/ +/g,"");
     },
 
@@ -79,6 +99,9 @@ module.exports = {
      */
 
     reverse:function (list) {
+        if(list === null) {
+            return false;
+        }
         for (var i = 0; i < list.length / 2; i++) {
             var newArr = list[i];
             list[i] = list[list.length - 1 - i];
@@ -96,6 +119,14 @@ module.exports = {
 
 
     map: function (list, iterator) {
+        if(list === null) {
+            return false;
+        }
+        for (var j = 0; j < list.length; j++) {
+            if (typeof list[j] === 'string') {
+                return false;
+            }
+        }
         if (this.isObject(list)) {
             var newObj = {};
 
@@ -125,8 +156,14 @@ module.exports = {
      */
 
     groupBy:function (list, iterator) {
+        if(list === null) {
+            return false;
+        }
         var results = {};
         for (var i = 0; i < list.length; i++) {
+            if(typeof list[i] === 'string') {
+                return false;
+            }
             var key = iterator(list[i]);
             if (results.hasOwnProperty(key)) {
                 results[key].push(list[i]);
@@ -146,6 +183,9 @@ module.exports = {
      */
 
     once: function(func){
+        if(func === null) {
+            return false;
+        }
         var executed = false;
         return function() {
             if (!executed) {
@@ -177,7 +217,7 @@ module.exports = {
         };
     },
 
-    deepEqual: function(listOne, listTwo) {
+    same: function(listOne, listTwo) {
         var arrays = this.isArray(listOne) && this.isArray(listTwo);
         var objects = (!this.isArray(listOne) &&  typeof listOne === 'object') && (!this.isArray(listTwo) &&  typeof listTwo === 'object');
         var firstObjKeys = objects ? Object.keys(listOne) : listOne;
@@ -191,7 +231,7 @@ module.exports = {
             for (var i = 0; i < firstObjKeys.length; i++) {
                 currentKey = firstObjKeys[i];
                 if(typeof listOne[currentKey] === 'object' && typeof listTwo[currentKey] === 'object'){
-                    if(!this.deepEqual(listOne[currentKey], listTwo[currentKey])){
+                    if(!this.same(listOne[currentKey], listTwo[currentKey])){
                         return false;
                     }
                 }else if (secondObjKeys.indexOf(currentKey) == -1 || listOne[currentKey] !== listTwo[currentKey]) {
