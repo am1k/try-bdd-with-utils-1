@@ -1,5 +1,6 @@
 var utils = require('./utils'),
-	expect =  require('expect.js');
+	expect =  require('expect.js'),
+	sinon = require('sinon');
 
 describe('Utils', function() {
 
@@ -253,11 +254,18 @@ describe('Utils', function() {
 
 	describe('#once()', function () {
 		it('function that can only be called one time', function () {
-			var count = 0;
-			var newFunction = utils.once(function(){count++});
+			//var count = 0;
+			//var newFunction = utils.once(function(){count++});
+			//newFunction();
+			//newFunction();
+			//expect(count).to.equal(1);
+			var spy = sinon.spy();
+
+			var newFunction = utils.once(spy);
 			newFunction();
 			newFunction();
-			expect(count).to.equal(1);
+			expect(spy.calledOnce).to.equal(true);
+
 		});
 
 		it('should show null when value null', function () {
@@ -302,6 +310,37 @@ describe('Utils', function() {
 			expect(test()).to.equal(true);
 		});
 	});
+
+	describe("debounce with Fake Timer", function() {
+		before(function() {
+			this.clock = sinon.useFakeTimers();
+		});
+
+		after(function() {
+			this.clock.restore();
+		});
+
+		it("Should call function after n-milliseconds", function() {
+			var log = '';
+
+			function fakeTimer(arg) {
+				log += arg;
+			}
+
+			fakeTimer = utils.debounce(fakeTimer, 1000);
+
+			fakeTimer(1);
+			fakeTimer(2);
+
+			setTimeout(function() {fakeTimer(3)}, 100);
+			setTimeout(function() {fakeTimer(4)}, 1100);
+			setTimeout(function() {fakeTimer(5)}, 1500);
+
+			this.clock.tick(3000);
+			expect(log).to.equal("5");
+		});
+	});
+
 
 	describe('#same()', function () {
 		it ('This is the same object', function () {

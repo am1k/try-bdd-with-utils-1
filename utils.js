@@ -10,16 +10,21 @@ module.exports = {
         if (!this.isArray(list)){
             return false;
         }
+
         var count = list.length;
-        for (var i = 0; i < count-1; i++)
-        { for (var j = 0; j < count-1-i; j++)
-        { if ((comparator && comparator(list[j], list[j + 1])) ||
-            (!comparator && list[j] > list[j+1]))
-        { var app = list[j+1];
-            list[j+1] = list[j];
-            list[j] = app; }
+        var item;
+
+        for (var i = 0; i < count-1; i++) {
+            for (var j = 0; j < count-1-i; j++) {
+                if (comparator && comparator(list[j], list[j + 1]) ||
+            !comparator && list[j] > list[j+1]) {
+                    item = list[j+1];
+                    list[j+1] = list[j];
+                    list[j] = item;
+                }
+            }
         }
-        }
+
         return list;
     },
 
