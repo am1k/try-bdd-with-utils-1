@@ -7,7 +7,7 @@ module.exports = {
      */
 
     sort:function (list, comparator) {
-        if (list === null) {
+        if (!this.isArray(list)){
             return false;
         }
         var count = list.length;
@@ -30,13 +30,7 @@ module.exports = {
      */
 
     capitalize:function (string) {
-        if (typeof string === 'number') {
-            return false;
-        }
-        if (string === null) {
-            return false;
-        }
-        if(this.isObject(string)) {
+        if(!this.isString(string)) {
             return false;
         }
         var lowerCase = string.toLowerCase();
@@ -50,11 +44,9 @@ module.exports = {
      */
 
     camelize:function (sequence) {
+
         var string = '';
-        if(typeof sequence === 'number') {
-            return false;
-        }
-        if(sequence === null) {
+        if (!this.isArray(sequence) && !this.isString(sequence)) {
             return false;
         }
         if (this.isArray(sequence)) {
@@ -86,7 +78,7 @@ module.exports = {
      */
 
     trim:function (str) {
-        if(str === null) {
+        if(!this.isString(str)) {
             return false;
         }
         return str.replace(/ +/g,"");
@@ -99,7 +91,7 @@ module.exports = {
      */
 
     reverse:function (list) {
-        if(list === null) {
+        if(!this.isArray(list)) {
             return false;
         }
         for (var i = 0; i < list.length / 2; i++) {
@@ -119,7 +111,7 @@ module.exports = {
 
 
     map: function (list, iterator) {
-        if(list === null) {
+        if(!this.isObject(list) && !this.isArray(list)) {
             return false;
         }
         for (var j = 0; j < list.length; j++) {
@@ -156,7 +148,7 @@ module.exports = {
      */
 
     groupBy:function (list, iterator) {
-        if(list === null) {
+        if(!this.isArray(list)) {
             return false;
         }
         var results = {};
@@ -183,9 +175,6 @@ module.exports = {
      */
 
     once: function(func){
-        if(func === null) {
-            return false;
-        }
         var executed = false;
         return function() {
             if (!executed) {

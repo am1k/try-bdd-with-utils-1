@@ -5,16 +5,28 @@ describe('Utils', function() {
 
 	describe('#sort()', function() {
 		it('should sort given array of numbers with ascending ordering', function() {
-			expect(utils.sort([2, 1, 3, 0]).join()).to.equal([0, 1, 2, 3].join());
+			expect(utils.sort([2, 1, 3, 0])).to.eql([0, 1, 2, 3]);
 		});
 
 		it('should sort given array of numbers with ascending ordering', function() {
-			expect(utils.sort([2, 1, 3, 0], function(a, b){return a > b}).join()).to.equal([0, 1, 2, 3].join());
+			expect(utils.sort([2, 1, 3, 0], function(a, b){return a > b})).to.eql([0, 1, 2, 3]);
 		});
 
-		it('should show error when user enter wrong value', function() {
-			expect(utils.sort(null, function(a,b) {return a > b})).to.equal(false);
-		})
+		it('should sort given array of numbers with descending ordering', function() {
+			expect(utils.sort([2, 1, 3, 0], function(a, b){return a < b})).to.eql([3, 2, 1, 0]);
+		});
+
+		it('should show error when user enter null value', function() {
+			expect(utils.sort(null, function(a,b) {return a > b})).to.be.false;
+		});
+
+		it('should show error when value undefined', function() {
+			expect(utils.sort(undefined)).to.be.undefined;
+		});
+
+		it('should show error when user enter empty input', function() {
+			expect(utils.sort([])).to.be.empty;
+		});
 
 	});
 
@@ -31,16 +43,20 @@ describe('Utils', function() {
 			expect(utils.capitalize('jUST DO IT')).to.equal('Just do it');
 		});
 
-		it('should show error when user enter wrong value', function() {
-			expect(utils.capitalize(1,2,3)).to.equal(false);
+		it('should show error when user enter string value', function() {
+			expect(utils.capitalize(1,2,3)).to.be.false;
 		});
 
-		it ('should show error when user enter wrong value', function() {
-			expect(utils.capitalize(null)).to.equal(false);
+		it ('should show null when value null ', function() {
+			expect(utils.capitalize(null)).to.be.null;
 		});
 
-		it ('should show error when user enter wrong value', function() {
-			expect(utils.capitalize({1: [2,3]})).to.equal(false);
+		it ('should show undefined when user enter wrong value', function() {
+			expect(utils.capitalize(undefined)).to.be.undefined;
+		});
+
+		it ('should show error when user enter object as value', function() {
+			expect(utils.capitalize({1: [2,3]})).to.be.false;
 		})
 
 	});
@@ -66,12 +82,19 @@ describe('Utils', function() {
 			expect(utils.camelize(['Equipment', 'Class', 'Name'])).to.equal('EquipmentClassName');
 		});
 
-		it('should show error when user enter wrong value', function() {
-			expect(utils.camelize(1,2,3)).to.equal(false);
+		it('should make error when user enter object value', function() {
+			expect(utils.camelize({'1': [ 1.1, 1.2 ], '2': [ 2.1, 2.3 ]})).to.be.false;
 		});
 
-		it('should show error when user enter wrong value', function() {
-			expect(utils.camelize(null)).to.equal(false);
+		it('should show error when user enter string value', function() {
+			expect(utils.camelize(1,2,3)).to.be.false;
+		});
+
+		it('should show null when value null ', function() {
+			expect(utils.camelize(null)).to.be.null;
+		});
+		it('should show undefined when user enter wrong value', function() {
+			expect(utils.camelize(undefined)).to.be.undefined;
 		});
 
 	});
@@ -94,8 +117,20 @@ describe('Utils', function() {
 			expect(utils.trim('1  3 4  5')).to.equal('1345');
 		});
 
-		it('should show error when user enter wrong value', function() {
-			expect(utils.trim(null)).to.equal(false);
+		it('should show null when value null ', function() {
+			expect(utils.trim(null)).to.be.null;
+		});
+
+		it('should show undefined when user enter wrong value', function() {
+			expect(utils.trim(undefined)).to.be.undefined;
+		});
+
+		it('should show error when user enter array value', function() {
+			expect(utils.trim([1,  3,  4])).to.be.false;
+		});
+
+		it('should show error when user enter object value', function() {
+			expect(utils.trim({1:[2], 2:[3]})).to.be.false;
 		});
 
 	});
@@ -108,12 +143,20 @@ describe('Utils', function() {
 			expect(utils.reverse([2,3,4,5])).to.eql([5,4,3,2]);
 		});
 
-		it ('should show numbers reverse', function() {
+		it ('should show reverse array', function() {
 			expect(utils.reverse([2,'hi',4,'bro'])).to.eql(['bro',4,'hi',2]);
 		});
 
-		it ('should show error when user enter wrong value', function() {
-			expect(utils.reverse(null)).to.equal(false);
+		it ('should show null when value null', function() {
+			expect(utils.reverse(null)).to.be.null;
+		});
+
+		it ('should show undefined when user enter wrong value', function() {
+			expect(utils.reverse(undefined)).to.be.undefined;
+		});
+
+		it ('should show error when user enter object value', function() {
+			expect(utils.reverse({2: [3], 4: [3,5]})).to.be.false;
 		});
 	});
 
@@ -123,7 +166,15 @@ describe('Utils', function() {
 
 			expect(utils.map(newArr, function (int) {
 				return --int;
-			}).join()).to.equal([9, 19, 29, 39, 49].join());
+			})).to.eql([9, 19, 29, 39, 49]);
+		});
+
+		it ('should show when user enter empty value', function () {
+			var newArr = [];
+
+			expect(utils.map(newArr, function (int) {
+				return --int;
+			})).to.be.empty;
 		});
 
 		it ('should change each list element by +1', function() {
@@ -131,15 +182,23 @@ describe('Utils', function() {
 
 			expect(utils.map(newArr, function (int){
 				return ++int;
-			}).join()).to.equal([11,21,31,41,51].join());
+			})).to.eql([11,21,31,41,51]);
 		});
 
-		it ('should change error when user enter wrong value', function() {
+		it ('should change error when user enter array with string value', function() {
 			var newArr = ['hi', 'bro'];
 
 			expect(utils.map(newArr, function (int) {
 				return ++int;
 			})).to.eql(false);
+		});
+
+		it ('should show null when value null', function() {
+			var newArr = [null];
+
+			expect(utils.map(newArr, function (int) {
+				return ++int;
+			})).to.be.null;
 		});
 
 		it ('should change each list element by applying handler', function () {
@@ -160,16 +219,9 @@ describe('Utils', function() {
 			expect(utils.map(firstObj, function (string) {
 				string += '';
 				return string.toUpperCase();
-			}).toString()).to.equal(secondObj.toString());
+			})).to.eql(secondObj);
 		});
 
-		it ('should show error when user enter wrong value', function() {
-			var newArr = null;
-
-			expect(utils.map(newArr, function (int) {
-				return ++int;
-			})).to.equal(false);
-	});
 	});
 
 	describe('#groupBy()',  function () {
@@ -181,7 +233,7 @@ describe('Utils', function() {
 			})).to.eql({'1': [ 1.1, 1.2 ], '2': [ 2.1, 2.3 ]});
 		});
 
-		it('should show error when user enter wrong value', function() {
+		it('should show error when user enter array value', function() {
 			var testArray = ['hi', 'bro'];
 
 			expect(utils.groupBy(testArray, function (num) {
@@ -189,13 +241,14 @@ describe('Utils', function() {
 			})).to.eql(false);
 		});
 
-		it('should show error when user enter wrong value', function() {
-			var testArray = null;
-
-			expect(utils.groupBy(testArray, function (num) {
-				return Math.floor(num);
-			})).to.eql(false);
+		it('should show null when value null', function() {
+			expect(utils.groupBy(null)).to.be.null;
 		});
+
+		it('should show undefined when user enter wrong value', function() {
+			expect(utils.groupBy(undefined)).to.be.undefined;
+		});
+
 	});
 
 	describe('#once()', function () {
@@ -205,6 +258,14 @@ describe('Utils', function() {
 			newFunction();
 			newFunction();
 			expect(count).to.equal(1);
+		});
+
+		it('should show null when value null', function () {
+			expect(utils.once(null)).to.be.null;
+		});
+
+		it('should show undefined when user enter wrong value', function () {
+			expect(utils.once(undefined)).to.be.undefined;
 		});
 
 	});
@@ -263,5 +324,80 @@ describe('Utils', function() {
 			var second = {2: 5};
 			expect(utils.same(first,second)).to.equal(false);
 		});
+
+		it('should show null when value null', function () {
+			expect(utils.same(null)).to.be.null;
+		});
+
+		it('should show undefined when user enter wrong value', function () {
+			expect(utils.same(undefined)).to.be.undefined;
+		});
 	});
+
+	describe('#isArray()', function() {
+		it('This is test for correct value array', function () {
+			expect(utils.isArray([2,3])).to.be.true;
+		});
+
+		it('This is test check value array if we enter object, result this test false', function () {
+			expect(utils.isArray({2:[3]})).to.be.false;
+		});
+
+		it('This is test check value array if we enter string, result this test false', function () {
+			expect(utils.isArray(1,2,3)).to.be.false;
+		});
+
+		it('This is test check value array if we enter null, result this test null', function () {
+			expect(utils.isArray(null)).to.be.null;
+		});
+
+		it('This is test check value array if we enter undefined, result this test undefined', function () {
+			expect(utils.isArray(undefined)).to.be.undefined;
+		});
+	});
+
+	describe('#isObject()', function() {
+		it('This is test for correct value object', function () {
+			expect(utils.isObject({2:[3]})).to.be.true;
+		});
+
+		it('This is test check value object if we enter array, result this test false', function () {
+			expect(utils.isObject([2,3])).to.be.false;
+		});
+
+		it('This is test check value object if we enter string, result this test false', function () {
+			expect(utils.isObject(1,2,3)).to.be.false;
+		});
+
+		it('This is test check value object if we enter null, result this test null', function () {
+			expect(utils.isObject(null)).to.be.null;
+		});
+
+		it('This is test check value object if we enter undefined, result this test undefined', function () {
+			expect(utils.isObject(undefined)).to.be.undefined;
+		});
+	});
+
+	describe('#isString()', function() {
+		it('This is test for correct value string', function () {
+			expect(utils.isString(1,23)).to.be.true;
+		});
+
+		it('This is test check value string if we enter array, result this test false', function () {
+			expect(utils.isString([2,3])).to.be.false;
+		});
+
+		it('This is test check value string if we enter object, result this test false', function () {
+			expect(utils.isString({1:[2,3]})).to.be.false;
+		});
+
+		it('This is test check value string if we enter null, result this test null', function () {
+			expect(utils.isString(null)).to.be.null;
+		});
+
+		it('This is test check value string if we enter undefined, result this test undefined', function () {
+			expect(utils.isString(undefined)).to.be.undefined;
+		});
+	});
+
 });
